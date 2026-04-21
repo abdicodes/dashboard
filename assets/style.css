@@ -1,0 +1,75 @@
+:root {
+  --bg: #0f1115;
+  --surface: #161b22;
+  --surface-2: #1c222b;
+  --border: #2a3140;
+  --text: #e6edf3;
+  --muted: #8b949e;
+  --green: #3fb950;
+  --yellow: #d29922;
+  --red: #f85149;
+  --accent: #58a6ff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  height: 100%;
+}
+
+.panel-title {
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 12px 0;
+  font-weight: 600;
+}
+
+.trend-up {
+  color: var(--green);
+}
+.trend-down {
+  color: var(--red);
+}
+.trend-flat {
+  color: var(--muted);
+}
+
+.pill-tab {
+  flex: 1;
+  text-align: center;
+  padding: 8px 6px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.pill-tab--active {
+  background: #21262d;
+  color: var(--text);
+  border-color: var(--accent);
+}
+
+.sparkline-wrap .js-plotly-plot .plotly .main-svg {
+  border-radius: 6px;
+}
