@@ -6,6 +6,7 @@ INVENTORY = [
     {
         "category": "Food",
         "kg": 1240,
+        "eur_per_kg": 6.4,
         "segments": [45, 35, 20],
         "lots": [
             {"name": "LOT #1", "kg": 520, "segments": [50, 30, 20], "expiry": "ok"},
@@ -16,6 +17,7 @@ INVENTORY = [
     {
         "category": "Beverages",
         "kg": 210,
+        "eur_per_kg": 3.2,
         "segments": [60, 30, 10],
         "lots": [
             {"name": "LOT #1", "kg": 120, "segments": [70, 20, 10], "expiry": "ok"},
@@ -25,6 +27,7 @@ INVENTORY = [
     {
         "category": "Pastry / frozen",
         "kg": 380,
+        "eur_per_kg": 8.1,
         "segments": [25, 35, 40],
         "lots": [
             {"name": "LOT #1", "kg": 200, "segments": [20, 30, 50], "expiry": "critical"},
@@ -34,6 +37,10 @@ INVENTORY = [
 ]
 
 SEG_COLORS = ["#3fb950", "#d29922", "#f85149"]
+
+
+def _format_eur(amount: float) -> str:
+    return f"€ {amount:,.0f}"
 
 
 def _segment_bar(widths, height="12px"):
@@ -54,8 +61,9 @@ def _segment_bar(widths, height="12px"):
     )
 
 
-def _lot_row(lot):
+def _lot_row(lot, eur_per_kg):
     exp = lot["expiry"]
+    value = lot["kg"] * eur_per_kg
     border = (
         "1px solid var(--red)"
         if exp == "critical"
@@ -84,6 +92,7 @@ def _lot_row(lot):
                         style={"display": "flex", "gap": "8px", "alignItems": "center"},
                         children=[
                             html.Span(f"{lot['kg']} kg", style={"fontSize": "11px", "color": "var(--muted)"}),
+                            html.Span(_format_eur(value), style={"fontSize": "11px", "color": "var(--muted)"}),
                             html.Span("🗑", style={"cursor": "pointer", "opacity": 0.75}),
                             html.Span("📅", style={"cursor": "pointer", "opacity": 0.75}),
                         ],
@@ -105,6 +114,7 @@ def _filter_inventory(query: str):
 def _inventory_body(rows):
     blocks = []
     for row in rows:
+        category_value = row["kg"] * row["eur_per_kg"]
         blocks.append(
             html.Div(
                 style={"marginBottom": "16px"},
@@ -118,13 +128,25 @@ def _inventory_body(rows):
                         },
                         children=[
                             html.Span(row["category"], style={"fontWeight": "700", "fontSize": "14px"}),
-                            html.Span(f"{row['kg']} kg", style={"fontSize": "12px", "color": "var(--muted)"}),
+                            html.Div(
+                                style={
+                                    "display": "flex",
+                                    "gap": "10px",
+                                    "alignItems": "center",
+                                    "fontSize": "12px",
+                                    "color": "var(--muted)",
+                                },
+                                children=[
+                                    html.Span(f"{row['kg']} kg"),
+                                    html.Span(_format_eur(category_value)),
+                                ],
+                            ),
                         ],
                     ),
                     _segment_bar(row["segments"]),
                     html.Div(
                         style={"marginTop": "10px", "display": "flex", "flexDirection": "column", "gap": "4px"},
-                        children=[_lot_row(lot) for lot in row["lots"]],
+                        children=[_lot_row(lot, row["eur_per_kg"]) for lot in row["lots"]],
                     ),
                 ],
             )
