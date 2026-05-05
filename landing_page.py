@@ -41,7 +41,7 @@ def create_landing_page():
                         className="landing-hero",
                         children=[
                             html.H1(
-                                "Track food cost across hotels—"
+                                "Track food cost across hotels "
                                 "from invoices to action",
                                 className="landing-hero-title",
                             ),
